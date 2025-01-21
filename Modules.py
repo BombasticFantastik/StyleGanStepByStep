@@ -1,5 +1,5 @@
 from torch import nn
-
+import torch
 class Mapping_linear_lay(nn):
     def __init__(self,z_dim,w_dim):
         super(Mapping_linear_lay,self).__init__()
@@ -44,3 +44,39 @@ class AdaIN(nn):
         style_scale=self.style_scale(w).unsqueeze(2).unsqueeze(3)#РАЗОБРАТЬСЯ С УНСКВИЗ
         style_bias=self.style_scale(w).unsqueeze(2).unsqueeze(3)
         return x*style_scale+ style_bias
+
+class InjectNoise(nn):
+    def __init__(self,x_dim):
+        super(InjectNoise,self).__init__()
+        self.weight = nn.Parameter(torch.zeros((1,x_dim,1,1)))
+    def forward(self,x):
+        noise = torch.radn((x.shape[0],1,x.shape[2],x.shape[3]),device=x.device)
+        return x+self.weight(x)*noise
+
+class ConvLay(nn):
+    def __init__(self,input_size,output_size,kernel_size=3,stride=1,padding=1):
+        super(ConvLay,self).__init__()
+        self.conv=nn.Conv2d(input_size,output_size,kernel_size,stride,padding)
+    def forward(self,x):
+        conv_x=self.conv(x)
+        return conv_x
+    
+class GenBlock(nn):
+    def __init__(self,input_size,output_size,w_dim):
+        super(GenBlock,self).__init__()
+
+        self.conv0=nn.Conv2d(input_size,output_size)  
+        self.conv1=nn.Conv2d(output_size,output_size)     
+
+        self.noise0=InjectNoise(output_size)
+        self.noise1=InjectNoise(output_size)
+
+        self.Ada0=AdaIN(w_dim=w_dim,x_dim=output_size)
+        self.Ada1=AdaIN(w_dim=w_dim,x_dim=output_size)
+
+        self.relu=nn.LeakyReLU(0.2)
+
+    def forward(self,x):
+        x0= self.Ada0(self.relu(self.noise0(self.conv0(x))))
+        x1= self.Ada1(self.relu(self.noise1(self.conv1(x0))))
+        return x1

@@ -6,12 +6,12 @@ from Generator import Generator
 from Discriminator import Discriminator
 import yaml
 
-option_path='config.yml'
-with open(option_path,'r') as file_option:
-    option=yaml.safe_load(file_option)
-device=option['device']
 
-def TrainingLoop(discriminator:Discriminator,generator:Generator,dataloader:DataLoader,step:int,aplpha:float,disc_optimizer:torch.optim.AdamW,gen_optimizer:torch.optim.AdamW,disc_loss_func,gen_loss_func):
+
+def TrainingLoop(discriminator:Discriminator,generator:Generator,dataloader:DataLoader,step,aplpha,disc_optimizer,gen_optimizer,disc_loss_func,gen_loss_func):
+    step=option['steps'],
+    aplpha=option['alpha'],
+    
     for batch in tqdm(dataloader):
         
 

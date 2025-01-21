@@ -3,11 +3,19 @@ import torch
 from Dataset import AnimeDataset
 from Modules import AdaIN,ConvLay,Mapping_network,GenBlock,InjectNoise
 import torch.nn.functional as F
-factors=[1, 1, 1, 1, 1 / 2, 1 / 4, 1 / 8, 1 / 16, 1 / 32]
+import yaml
+
+
+
 
 class Generator(nn):
-    def __init__(self,z_dim,w_dim,input_size,img_size=3):
+    def __init__(self,option:dict,img_size=3):
         super(Generator,self).__init__()
+
+        z_dim=option['shapes']['z_dim']
+        w_dim=option['shapes']['w_dim']
+        input_size=option['shapes']['in_channels']
+        factors=option['factors']
 
         self.mapnet=Mapping_network(z_dim,w_dim)
 
