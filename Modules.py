@@ -1,14 +1,17 @@
+from torch.nn import Module
 from torch import nn
 import torch
-class Mapping_linear_lay(nn):
+
+class Mapping_linear_lay(Module):
     def __init__(self,z_dim,w_dim):
         super(Mapping_linear_lay,self).__init__()
         self.fc=nn.Linear(z_dim,w_dim)
         self.relu=nn.ReLU(0.2)
     def forward(self,x):
         return self.relu(self.fc(x))
+        #return 1
 
-class Mapping_network(nn):
+class Mapping_network(Module):
     def __init__(self,z_dim,w_dim):
         super(Mapping_network,self).__init__()
         self.map0=Mapping_linear_lay(z_dim,w_dim)
@@ -33,7 +36,7 @@ class Mapping_network(nn):
 
 
 
-class AdaIN(nn):
+class AdaIN(Module):
     def __init__(self,w_dim,x_dim):
         super(AdaIN,self).__init__()
         self.instance_norm=nn.InstanceNorm2d(x_dim)#ЭТО ШУМ, ЗДЕСЬ МЫ РАБОТАЕМ С ШУМОМ, А НЕ С ВЕКТОРОМ СТИЛЯ
@@ -45,28 +48,31 @@ class AdaIN(nn):
         style_bias=self.style_scale(w).unsqueeze(2).unsqueeze(3)
         return x*style_scale+ style_bias
 
-class InjectNoise(nn):
+class InjectNoise(Module):
     def __init__(self,x_dim):
         super(InjectNoise,self).__init__()
         self.weight = nn.Parameter(torch.zeros((1,x_dim,1,1)))
     def forward(self,x):
-        noise = torch.radn((x.shape[0],1,x.shape[2],x.shape[3]),device=x.device)
-        return x+self.weight(x)*noise
+        noise = torch.randn((x.shape[0],1,x.shape[2],x.shape[3]),device=x.device)
+        return x+self.weight*noise
 
-class ConvLay(nn):
+class ConvLay(Module):
     def __init__(self,input_size,output_size,kernel_size=3,stride=1,padding=1):
         super(ConvLay,self).__init__()
-        self.conv=nn.Conv2d(input_size,output_size,kernel_size,stride,padding)
+        #self.conv=nn.Conv2d(input_size=input_size,output_size=output_size,kernel_size,stride,padding)
+        #output_size=int(output_size)
+        
+        self.conv=nn.Conv2d(in_channels=input_size,out_channels=output_size,kernel_size=kernel_size,stride=stride,padding=padding)
     def forward(self,x):
         conv_x=self.conv(x)
         return conv_x
     
-class GenBlock(nn):
+class GenBlock(Module):
     def __init__(self,input_size,output_size,w_dim):
         super(GenBlock,self).__init__()
 
-        self.conv0=nn.Conv2d(input_size,output_size)  
-        self.conv1=nn.Conv2d(output_size,output_size)     
+        self.conv0=ConvLay(input_size,output_size)  
+        self.conv1=ConvLay(output_size,output_size)     
 
         self.noise0=InjectNoise(output_size)
         self.noise1=InjectNoise(output_size)
@@ -76,7 +82,7 @@ class GenBlock(nn):
 
         self.relu=nn.LeakyReLU(0.2)
 
-    def forward(self,x):
-        x0= self.Ada0(self.relu(self.noise0(self.conv0(x))))
-        x1= self.Ada1(self.relu(self.noise1(self.conv1(x0))))
+    def forward(self,x,w):
+        x0= self.Ada0(self.relu(self.noise0(self.conv0(x))),w)
+        x1= self.Ada1(self.relu(self.noise1(self.conv1(x0))),w)
         return x1

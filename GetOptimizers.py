@@ -5,9 +5,9 @@ def GetGenOptimizer(gen_model,options:dict):
     lr=float(options['optimizers']['generator_optimizer']['lr'])
     match(optimizer_name):
         case 'AdamW':
-            return  AdamW([{"params": [param for name, param in gen_model.named_parameters() if "map" not in name]},{"params": gen_model.after_mapping.parameters(), "lr": 1e-5}],lr=lr,betas=(0.0, 0.99))
+            return  AdamW([{"params": [param for name, param in gen_model.named_parameters() if "map" not in name]},{"params": gen_model.mapnet.parameters(), "lr": 1e-5}],lr=lr,betas=(0.0, 0.99))
         case 'Adam':
-            return Adam([{"params": [param for name, param in gen_model.named_parameters() if "map" not in name]},{"params": gen_model.after_mapping.parameters(), "lr": 1e-5}],lr=lr,betas=(0.0, 0.99))
+            return Adam([{"params": [param for name, param in gen_model.named_parameters() if "map" not in name]},{"params": gen_model.mapnet.parameters(), "lr": 1e-5}],lr=lr,betas=(0.0, 0.99))
         case _:
             raise Exception("Нет такого оптимизатора")
         

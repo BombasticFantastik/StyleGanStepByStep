@@ -3,12 +3,13 @@ import torch
 from Dataset import AnimeDataset
 from Modules import AdaIN,ConvLay,Mapping_network,GenBlock,InjectNoise
 import torch.nn.functional as F
+from torch.nn import Module
 import yaml
 
 
 
 
-class Generator(nn):
+class Generator(Module):
     def __init__(self,option:dict,img_size=3):
         super(Generator,self).__init__()
 
@@ -35,8 +36,9 @@ class Generator(nn):
         self.rgb_layers=nn.ModuleList([self.rgblay])
 
         for i in range(len(factors)-1):
-            in_size=input_size*factors[i]
-            out_size=input_size*factors[i+1]
+            in_size=int(input_size*factors[i])
+            out_size=int(input_size*factors[i+1])
+            
             self.prog_blocs.append(GenBlock(in_size,out_size,w_dim))
             self.rgb_layers.append(ConvLay(out_size,img_size,kernel_size=1,stride=1,padding=0))
 
@@ -48,16 +50,20 @@ class Generator(nn):
 
         w=self.mapnet(noice)
         x=self.inital_conv(self.ada0(self.noisegen0(self.const),w))
-        x=self.ada1(self.relu(self.noisegen1(x),w))
+        x=self.ada1(self.relu(self.noisegen1(x)),w)
 
         if steps==0:
             return self.rgblay(x)
+        
+
         for step in range(steps):
-            upscaled=F.interpolate(x,scale_factor=2,mode='bilinear')
-            x=self.prog_blocs[step](upscaled)
             
-        final_out=self.prog_blocs[steps-1](upscaled)
-        final_ups=self.prog_blocs[steps](x)
+            upscaled=F.interpolate(x,scale_factor=2,mode='bilinear')
+            print(x.shape,w.shape,upscaled.shape)
+            x=self.prog_blocs[step](upscaled,w)
+            
+        final_out=self.rgb_layers[steps-1](upscaled)
+        final_ups=self.rgb_layers[steps](x)
 
         return self.fade_in(aplpha,final_ups,final_out)
         

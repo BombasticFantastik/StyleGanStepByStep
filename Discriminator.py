@@ -1,23 +1,24 @@
 import torch.nn as nn
 from Modules import ConvLay
 import torch
+from torch.nn import Module
 
 
 
 
-class   DiscConvBlock(nn):
+class   DiscConvBlock(Module):
     def __init__(self,input_size,output_size):
         super(DiscConvBlock,self).__init__()
 
-        self.conv0=nn.Conv2d(input_size,output_size)
-        self.conv1=nn.Conv2d(output_size,output_size)
+        self.conv0=nn.Conv2d(input_size,output_size,kernel_size=3)#я добавил кернел сайз
+        self.conv1=nn.Conv2d(output_size,output_size,kernel_size=3)#я добавил кернел сайз
         self.relu=nn.LeakyReLU(0.2,inplace=True)
     def forward(self,x):
         x=self.relu(self.conv0(x))
         x=self.relu(self.conv1(x))
         return x
     
-class Discriminator(nn):
+class Discriminator(Module):
     def __init__(self,option:dict,img_size=3):
         super(Discriminator,self).__init__()
 
