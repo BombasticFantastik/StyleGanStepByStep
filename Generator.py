@@ -59,7 +59,7 @@ class Generator(Module):
         for step in range(steps):
             
             upscaled=F.interpolate(x,scale_factor=2,mode='bilinear')
-            print(x.shape,w.shape,upscaled.shape)
+            
             x=self.prog_blocs[step](upscaled,w)
             
         final_out=self.rgb_layers[steps-1](upscaled)

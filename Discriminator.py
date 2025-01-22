@@ -10,8 +10,8 @@ class   DiscConvBlock(Module):
     def __init__(self,input_size,output_size):
         super(DiscConvBlock,self).__init__()
 
-        self.conv0=nn.Conv2d(input_size,output_size,kernel_size=3)#я добавил кернел сайз
-        self.conv1=nn.Conv2d(output_size,output_size,kernel_size=3)#я добавил кернел сайз
+        self.conv0=nn.Conv2d(input_size,output_size,kernel_size=3,stride=1,padding=1)#я добавил кернел сайз
+        self.conv1=nn.Conv2d(output_size,output_size,kernel_size=3,stride=1,padding=1)#я добавил кернел сайз
         self.relu=nn.LeakyReLU(0.2,inplace=True)
     def forward(self,x):
         x=self.relu(self.conv0(x))
@@ -59,16 +59,20 @@ class Discriminator(Module):
     def forward(self,x,alpha,steps):
         correct_step=len(self.prog_blocks)-steps
         out=self.relu(self.rgb_layers[correct_step](x))
+        
 
         if steps==0:
             out=self.minibatch_std(x)
             return self.final_block(out).view(out.shape,-1)
         
         downscaled=self.relu(self.rgb_layers[correct_step+1](self.avg_pool(x)))
+        
         out=self.avg_pool(self.prog_blocks[correct_step](out))
+        
         out=self.fade_in(alpha,downscaled,out)
+        
 
-        for step in steps:
+        for step in range(correct_step+1,len(self.prog_blocks)):
             out=self.prog_blocks[step](out)
             out=self.avg_pool(out)
         out=self.minibatch_std(out)
