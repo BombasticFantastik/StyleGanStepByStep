@@ -8,9 +8,11 @@ import yaml
 
 
 
-def TrainingLoop(discriminator:Discriminator,generator:Generator,dataloader:DataLoader,step,aplpha,disc_optimizer,gen_optimizer,disc_loss_func,gen_loss_func):
+def TrainingLoop(discriminator:Discriminator,generator:Generator,dataloader:DataLoader,disc_optimizer,gen_optimizer,disc_loss_func,gen_loss_func,option):
     step=option['steps'],
     aplpha=option['alpha'],
+    device=option['device']
+    z_dim=option['shapes']['z_dim']
     
     for batch in tqdm(dataloader):
         

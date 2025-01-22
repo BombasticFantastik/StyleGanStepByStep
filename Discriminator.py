@@ -2,7 +2,7 @@ import torch.nn as nn
 from Modules import ConvLay
 import torch
 
-factors=[1, 1, 1, 1, 1 / 2, 1 / 4, 1 / 8, 1 / 16, 1 / 32]
+
 
 
 class   DiscConvBlock(nn):
@@ -18,8 +18,12 @@ class   DiscConvBlock(nn):
         return x
     
 class Discriminator(nn):
-    def __init__(self,input_size,img_size=3):
+    def __init__(self,option:dict,img_size=3):
         super(Discriminator,self).__init__()
+
+        input_size=option['shapes']['in_channels']
+        factors=option['factors']
+
         self.relu=nn.LeakyReLU(0.2,inplace=True)
 
         self.prog_blocks=nn.ModuleList([])

@@ -12,10 +12,17 @@ shapes:
   z_dim: 256
   w_dim: 256
   in_channels: 256
+optimizers:
+  generator_optimizer: 
+    name: AdamW
+    lr: 1e-5
+  discriminator_optimizer: 'AdamW'
+    name: AdamW
+    lr: 1e-5
 device: 'cuda'
 factors: [1, 1, 1, 1, 0.5, 0.25, 0.125, 0.0625, 0.03125]
 steps: 30
-aplpha: 1.0
+aplpha: 1e-5
 
 
 
