@@ -2,6 +2,8 @@ import torch
 import torch.optim.optimizer
 from torch.utils.data import DataLoader
 #import tqdm.std as tqdm
+import atexit
+from WeightsSaver import WeightsSaver,WeightsCountChanger
 from tqdm import tqdm
 from Generator import Generator
 from Discriminator import Discriminator
@@ -42,6 +44,8 @@ def TrainingLoop(discriminator:Discriminator,generator:Generator,dataloader:Data
         generator_loss.backward()
         gen_optimizer.step()
         pbar.set_description(f"disc_loss: {disc_loss_item} | gen_loss: {gen_loss_item}")
+        atexit.register(WeightsSaver,generator,discriminator,option)
+        atexit.register(WeightsCountChanger,option)
        
 
 
