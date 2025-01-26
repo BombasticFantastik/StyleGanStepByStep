@@ -3,7 +3,9 @@ import torch.optim.optimizer
 from torch.utils.data import DataLoader
 #import tqdm.std as tqdm
 import atexit
-from WeightsSaver import WeightsSaver,WeightsCountChanger
+#import signal
+from WeightsSaver import save_weights,change_weights_count
+from WeightLoader import load_weights
 from tqdm import tqdm
 from Generator import Generator
 from Discriminator import Discriminator
@@ -16,6 +18,8 @@ def TrainingLoop(discriminator:Discriminator,generator:Generator,dataloader:Data
     alpha=float(option['alpha'])
     device=option['device']
     z_dim=option['shapes']['z_dim']
+    change_weights_count(option)
+    load_weights(generator,discriminator,option)
     
     for batch in (pbar:= tqdm(dataloader)):
         
@@ -44,8 +48,8 @@ def TrainingLoop(discriminator:Discriminator,generator:Generator,dataloader:Data
         generator_loss.backward()
         gen_optimizer.step()
         pbar.set_description(f"disc_loss: {disc_loss_item} | gen_loss: {gen_loss_item}")
-        atexit.register(WeightsSaver,generator,discriminator,option)
-        atexit.register(WeightsCountChanger,option)
+        atexit.register(save_weights,generator,discriminator,option)
+        
        
 
 

@@ -1,12 +1,12 @@
 import torch
 from torch.nn import Module
-def WeightsSaver(gen_model:Module,disc_model:Module,option:dict):
+def save_weights(gen_model:Module,disc_model:Module,option:dict):
     torch.save(gen_model.state_dict(),f'Gen_model_weights/gen_weights{option['weights_count']}.pth')
     torch.save(disc_model.state_dict(),f'Disc_model_weights/disc_weights{option["weights_count"]}.pth')
     
 
-def WeightsCountChanger(option:dict):
-    real_data="eeee"
+def change_weights_count(option:dict):
+    real_data="this is tarabarshina"
     filename=option['paths']['yml_path']
     with open(filename,'r') as file:
         data=file.readlines()
@@ -16,7 +16,6 @@ def WeightsCountChanger(option:dict):
                 real_data=''.join(data)
                 break
             
-    #print(real_data)
     with open(filename,'w') as file:
         file.write(real_data)
 

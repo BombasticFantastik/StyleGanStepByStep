@@ -13,8 +13,8 @@ optimizers:
 paths:
   anime_dataset_path: './images'
   yml_path: Config.yml
-device: 'cuda'
+device: 'cpu'
 factors: [1, 1, 1, 1, 0.5, 0.25, 0.125, 0.0625, 0.03125]
 steps: 6
 epochs: 10 
-weights_count: 0
+weights_count: 2
