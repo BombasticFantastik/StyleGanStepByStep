@@ -10,6 +10,8 @@ from tqdm import tqdm
 from Generator import Generator
 from Discriminator import Discriminator
 import yaml
+from ImagesMaker import save_images
+import os
 
 
 
@@ -19,7 +21,10 @@ def TrainingLoop(discriminator:Discriminator,generator:Generator,dataloader:Data
     device=option['device']
     z_dim=option['shapes']['z_dim']
     change_weights_count(option)
+    #if len(os.listdir)
     load_weights(generator,discriminator,option)
+    
+    #save_images(generator,option)
     
     for batch in (pbar:= tqdm(dataloader)):
         
