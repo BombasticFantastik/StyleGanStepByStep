@@ -17,7 +17,7 @@ def save_images(gen_model:Generator,option:dict):
     created_images=gen_model(noise,float(option['alpha']),6)
     created_images=created_images.detach().numpy().transpose(1,2,0)
     img=Image.fromarray((created_images*255).astype(np.uint8)).convert('RGB')
-    img.save(f"Generated_images/anime_face{len(os.listdir('Generated_images'))}.jpeg")
+    img.save(f"{option['paths']['generated_images_path']}/anime_face{len(os.listdir('Generated_images'))}.jpeg")
 
 def make_images(gen_model:Generator,option:dict):
     noise=torch.randn(option['shapes']['batch_size'],option['shapes']['z_dim'])
@@ -25,13 +25,13 @@ def make_images(gen_model:Generator,option:dict):
     #print(created_images.shape)
     return created_images[0].detach().numpy().transpose(1,2,0)
     #plt.imshow(created_images[0].detach.numpy().transpose(1,2,0))
-anime_generator=Generator(option).to(option['device'])
-gen_dict=torch.load(f'Gen_model_weights/gen_weights{option['weights_count']}.pth',weights_only=True)
-anime_generator.load_state_dict(gen_dict)
-numpy_img=make_images(anime_generator,option)
-#print(numpy_img.max(),numpy_img.min())
-img=Image.fromarray((numpy_img*255).astype(np.uint8)).convert('RGB')
-img.save(f"Generated_images/anime_face{len(os.listdir('Generated_images'))}.jpeg")
+# anime_generator=Generator(option).to(option['device'])
+# gen_dict=torch.load(f'{option['paths']['gen_weights_path']}/gen_weights{option['weights_count']}.pth',weights_only=True)
+# anime_generator.load_state_dict(gen_dict)
+# numpy_img=make_images(anime_generator,option)
+# #print(numpy_img.max(),numpy_img.min())
+# img=Image.fromarray((numpy_img*255).astype(np.uint8)).convert('RGB')
+# img.save(f"Generated_images/anime_face{len(os.listdir('Generated_images'))}.jpeg")
 
 
     

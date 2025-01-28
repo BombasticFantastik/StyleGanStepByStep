@@ -12,6 +12,7 @@ class AnimeDataset(torch.utils.data.Dataset):
         path=option['paths']['anime_dataset_path']
 
         self.images=[os.path.join(path,img) for img in os.listdir(path)]
+        
         self.transforms=transforms.Compose([
             transforms.Resize((256,256)),
             transforms.ToTensor()
