@@ -1,5 +1,5 @@
 from torch.optim import Adam,AdamW
-import torch
+
 def GetGenOptimizer(gen_model,options:dict):
     optimizer_name=options['optimizers']['generator_optimizer']['name']
     lr=float(options['optimizers']['generator_optimizer']['lr'])

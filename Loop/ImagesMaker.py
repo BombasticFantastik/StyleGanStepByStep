@@ -1,5 +1,5 @@
 import torch
-from Generator import Generator
+from Models.Generator import Generator
 import torch
 import matplotlib.pyplot as plt
 import yaml

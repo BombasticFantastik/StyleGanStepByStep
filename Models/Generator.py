@@ -1,7 +1,7 @@
 import torch.nn as nn
 import torch
 from Dataset import AnimeDataset
-from Modules import AdaIN,ConvLay,Mapping_network,GenBlock,InjectNoise
+from Models.Modules import AdaIN,ConvLay,Mapping_network,GenBlock,InjectNoise
 import torch.nn.functional as F
 from torch.nn import Module
 import yaml

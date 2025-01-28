@@ -4,13 +4,13 @@ from torch.utils.data import DataLoader
 #import tqdm.std as tqdm
 import atexit
 #import signal
-from WeightsSaver import save_weights,change_weights_count
-from WeightLoader import load_weights
+from Loop.WeightsSaver import save_weights,change_weights_count
+from Loop.WeightLoader import load_weights
 from tqdm import tqdm
-from Generator import Generator
-from Discriminator import Discriminator
+from Models.Generator import Generator
+from Models.Discriminator import Discriminator
 import yaml
-from ImagesMaker import save_images
+from Loop.ImagesMaker import save_images
 import os
 
 

@@ -1,5 +1,5 @@
 import torch.nn as nn
-from Modules import ConvLay
+from Models.Modules import ConvLay
 import torch
 from torch.nn import Module
 

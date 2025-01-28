@@ -1,12 +1,12 @@
 import torch
 from Dataset import AnimeDataset
-from Discriminator import Discriminator
+from Models.Discriminator import Discriminator
 #from Modules import ConvLay
 import gc
-from Generator import Generator
+from Models.Generator import Generator
 import yaml
-from GetOptimizers import GetGenOptimizer,GetDiscOptimizer
-from TrainingLoop import TrainingLoop
+from Utils.GetOptimizers import GetGenOptimizer,GetDiscOptimizer
+from Loop.TrainingLoop import TrainingLoop
 from torch.nn import BCELoss
 
 option_path='Config.yml'
