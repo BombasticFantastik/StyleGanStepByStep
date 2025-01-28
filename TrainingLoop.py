@@ -25,13 +25,14 @@ def TrainingLoop(discriminator:Discriminator,generator:Generator,dataloader:Data
     if len(os.listdir(option['paths']['gen_weights_path']))==0:
         save_weights(generator,discriminator,option)
     
+    
 
     change_weights_count(option)
 
     load_weights(generator,discriminator,option)
     
     
-    #save_images(generator,option)
+    save_images(generator,option)
     
     for batch in (pbar:= tqdm(dataloader)):
         

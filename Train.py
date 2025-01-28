@@ -2,6 +2,7 @@ import torch
 from Dataset import AnimeDataset
 from Discriminator import Discriminator
 #from Modules import ConvLay
+import gc
 from Generator import Generator
 import yaml
 from GetOptimizers import GetGenOptimizer,GetDiscOptimizer
@@ -30,5 +31,10 @@ gen_loss_func=BCELoss()
 anime_discriminator=Discriminator(option).to(device)
 disc_optimizer=GetDiscOptimizer(anime_discriminator,option)
 disc_loss_func=BCELoss()
+
+#Очищаем память
+if option['device']=='cuda':
+    torch.cuda.empty_cache()
+    gc.collect()
 
 TrainingLoop(discriminator=anime_discriminator,generator=anime_generator,dataloader=anime_dataloader,disc_optimizer=disc_optimizer,gen_optimizer=gen_optimizer,disc_loss_func=disc_loss_func,gen_loss_func=gen_loss_func,option=option)

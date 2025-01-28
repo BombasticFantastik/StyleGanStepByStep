@@ -2,8 +2,8 @@ import torch
 from torch.nn import Module
 import os
 def save_weights(gen_model:Module,disc_model:Module,option:dict):
-    torch.save(gen_model.state_dict(),f'Gen_model_weights/gen_weights{option['weights_count']}.pth')
-    torch.save(disc_model.state_dict(),f'Disc_model_weights/disc_weights{option["weights_count"]}.pth')
+    torch.save(gen_model.state_dict(),f'Gen_model_weights/gen_weights{len(os.listdir(option['paths']['gen_weights_path']))-1}.pth')
+    torch.save(disc_model.state_dict(),f'Disc_model_weights/disc_weights{len(os.listdir(option['paths']['gen_weights_path']))-1}.pth')
     #print(option['weights_count'])
     
 

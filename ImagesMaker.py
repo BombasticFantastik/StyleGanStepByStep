@@ -13,9 +13,9 @@ with open(option_path,'r') as file_option:
 
 
 def save_images(gen_model:Generator,option:dict):
-    noise=torch.randn(option['shapes']['batch_size'],option['shapes']['z_dim'])
+    noise=torch.randn(option['shapes']['batch_size'],option['shapes']['z_dim']).to(option['device'])
     created_images=gen_model(noise,float(option['alpha']),6)
-    created_images=created_images.detach().numpy().transpose(1,2,0)
+    created_images=created_images[0].cpu().detach().numpy().transpose(1,2,0)
     img=Image.fromarray((created_images*255).astype(np.uint8)).convert('RGB')
     img.save(f"{option['paths']['generated_images_path']}/anime_face{len(os.listdir('Generated_images'))}.jpeg")
 
