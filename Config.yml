@@ -15,10 +15,10 @@ paths:
   anime_dataset_path: './Images'
   yml_path: Config.yml
   generated_images_path: ./Generated_images
-  disc_weights_path: ./Disc_model_weights
-  gen_weights_path: ./Gen_model_weights
-device: 'cpu'
+  disc_weights_path: Loop/Disc_model_weights
+  gen_weights_path: Loop/Gen_model_weights
+device: 'cuda'
 factors: [1, 1, 1, 1, 0.5, 0.25, 0.125, 0.0625, 0.03125]
 steps: 6
 epochs: 10 
-#weights_count 1
+weights_count: 2

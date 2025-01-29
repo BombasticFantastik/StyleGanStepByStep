@@ -20,10 +20,12 @@ def TrainingLoop(discriminator:Discriminator,generator:Generator,dataloader:Data
     alpha=float(option['alpha'])
     device=option['device']
     z_dim=option['shapes']['z_dim']
+    
     #weight_count=
     #change_weights_count(option)
     if len(os.listdir(option['paths']['gen_weights_path']))==0:
         save_weights(generator,discriminator,option)
+        option['weights_count']: str(int(option['weights_count'])+1)
     
     
 
