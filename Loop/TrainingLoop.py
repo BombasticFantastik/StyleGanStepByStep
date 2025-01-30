@@ -23,15 +23,21 @@ def TrainingLoop(discriminator:Discriminator,generator:Generator,dataloader:Data
     
     #weight_count=
     #change_weights_count(option)
-    if len(os.listdir(option['paths']['gen_weights_path']))==0:
-        save_weights(generator,discriminator,option)
-        option['weights_count']: str(int(option['weights_count'])+1)
+    # if len(os.listdir(option['paths']['gen_weights_path']))==0:
+    #     save_weights(generator,discriminator,option)
+    #     print(option['weights_count'])
+    #     option['weights_count']: str(int(option['weights_count'])+1)
+    #     print(option['weights_count'])
+
+    if len(os.listdir(option['paths']['gen_weights_path']))!=0:
+        load_weights(generator,discriminator,option)
+        print(1)
     
     
 
     change_weights_count(option)
 
-    load_weights(generator,discriminator,option)
+    #load_weights(generator,discriminator,option)
     
     
     save_images(generator,option)
