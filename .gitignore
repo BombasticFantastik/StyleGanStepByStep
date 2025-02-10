@@ -1,5 +1,5 @@
-Disc_model_weights
-Gen_model_weights
-/images
+/Loop/Disc_model_weights
+/Loop/Gen_model_weights
+/Images
 /Generated_images
-MemoryCleanear.py
+/Utils/MemoryCleanear.py
